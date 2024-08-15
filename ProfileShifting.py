@@ -29,7 +29,7 @@ time_intp_options = {
     'T4df': 1,
     'Tfxd': 1,
     'num_frames_fxd': 20}
-expected_peak =5
+expected_peak =3
 
 ## ---> SETTINGS
 rootDataDir = r'D:/InletProfileStudy/Shifting/Inputs/'
