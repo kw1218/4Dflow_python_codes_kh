@@ -19,8 +19,10 @@ import matplotlib.pyplot as plt
 import descriptors_utils as dut
 
 
-dataDir = r'D:/InletProfileStudy/SSM/Output_Kaihong/Patient_5_new700/'
-outDir = osp.join(dataDir, 'synthetic_cohort_first5modes')
+
+dataDir = r'D:/InletProfileStudy/SSM/Output_2024/SH_P5/'
+Fig_Dir = osp.join(dataDir, 'Figure')
+outDir = osp.join(dataDir, 'synthetic_cohort_first14modes')
 
 # read computed descriptors for real dataset
 real_descriptors = [np.load(fn, allow_pickle=True).tolist() for fn in sorted(glob(osp.join(dataDir, 'real_descriptors', '*.npy')))]
@@ -44,15 +46,17 @@ n_nodes = mean_profs[0].points.shape[0]
 
 
 # ----- Principal Component Analysis
-pca = PCA(n_components=18)
+pca = PCA(n_components=14)  # consistent with the number of modes used to generate synthetic dataset
 pca.fit(V)
+
+
 var_components = pca.explained_variance_ratio_      # Individual variance associated to single mode
-var = np.sum(pca.explained_variance_ratio_[:18])    # Cumulative variance
+var = np.sum(pca.explained_variance_ratio_[:18])    # Show Cumulative variance 
 
 pc = pca.components_.T
 variance = pca.explained_variance_
 a = pc
-lam = variance
+lam = variance   
 
 
 # -------- Shape Sampling: synthetic dataset generation
@@ -69,10 +73,10 @@ for k in ks:
     print('{} -- {:.2f}+-{:.2f}'.format(k, mu_d, 2*std_d))
 '''
 
-M = 5  # number of nodes selected
+M = 14  # number of nodes selected
 valid_count = 0
 synth_ds = []
-for i in tqdm(range(200)):
+for i in tqdm(range(300)):
     variation = 0
     for m in range(M):  # change for number of modes
         c = random.uniform(-1.5, 1.5)   # a random floating number
@@ -85,7 +89,6 @@ for i in tqdm(range(200)):
     # acceptance criteria
     synth_descriptors = dut.compute_flow_descriptors(new_profs)
     ks = ['ppv_mean', 'fdi_mean', 'fja_mean', 'sfd_mean', 'hfi_mean', 'rfi']
-    #ks = ['ppv_systole', 'fdm_systole', 'fdi_systole', 'fja_systole', 'sfd_systole', 'rfi']
     crits = []
     for k in ks:
         I_p = [dict_list_mean(real_descriptors, k) - 2*dict_list_std(real_descriptors, k),
@@ -264,7 +267,7 @@ fig.set_size_inches(15, 4)
 fig.tight_layout()
 #plt.subplots_adjust(left=None, bottom=None, right=None, top=None, wspace=0.3, hspace=0.65)
 #plt.show()
-plt.savefig(osp.join('D:/InletProfileStudy/SSM/figures', 'boxplot2_kaihong.png'), dpi=600)
+plt.savefig(osp.join(Fig_Dir, 'boxplot2_kaihong.png'), dpi=600)
 
 
 

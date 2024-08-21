@@ -24,13 +24,15 @@ import descriptors_utils as dut
 
 ## ---> SETTINGS
 rootDataDir = r'D:/InletProfileStudy/SSM/Input/'
-probedDataDir = osp.join(rootDataDir, 'probed_data')
-rootOutDir = r'D:/InletProfileStudy/SSM/Output_Kaihong/SINE_mm/'
+probedDataDir = osp.join(rootDataDir, 'Probed_root')
+rootOutDir = r'D:/InletProfileStudy/SSM/Output_2024/SH_P5/'
+Fig_Dir = osp.join(rootOutDir, 'Figure')
+os.makedirs(Fig_Dir, exist_ok=True)
 
-target_profile_fn = r'D:/InletProfileStudy/STLgeometry/P1_SINE.stl'  # can be a .stl, .vtk or .vtp file
+target_profile_fn = r'D:/InletProfileStudy/STLgeometry/P5mesh_1100.stl'  # can be a .stl, .vtk or .vtp file
 
 intp_options = {
-    'zero_boundary_dist': 0.1,
+    'zero_boundary_dist': 0.02,
     'zero_backflow': False,
     'kernel': 'linear',
     'smoothing': 1.5,
@@ -69,7 +71,7 @@ for i in tqdm(range(num_subjects)):
     lm_ids = [np.argmax(input_vtps[k].points[:, 0]) for k in range(num_frames)]
 
     # create fixed plane points, idealized circle plane
-    #fxdpts, fxd_lm = ut.set_fixed_points(r_spac=0.05, circ_spac=5)
+    # fxdpts, fxd_lm = ut.set_fixed_points(r_spac=0.05, circ_spac=5)
 
     # patient-specific plane
     target_plane = pv.read(target_profile_fn)
@@ -85,7 +87,7 @@ for i in tqdm(range(num_subjects)):
     below = np.sum(np.array(signs) < 0, axis=0)
     above = np.sum(np.array(signs) > 0, axis=0)
     #if np.sum(np.array(signs) < 0, axis=0) > np.sum(np.array(signs) > 0, axis=0):
-    normals = [normals[k] * -1 for k in range(num_frames)]
+    #normals = [normals[k] * -1 for k in range(num_frames)]
     target_com = fxdpts.mean(0)  # centre of mass of points on the reference plane
     dis2 = target_plane.points.mean(0)
     target_normal = target_plane.compute_normals()['Normals'].mean(0)
@@ -216,15 +218,15 @@ pl = pv.Plotter()
 pl.add_points(interp_planes[5].points, color='green')  # here 3 is related to the peak flow point, show points
 pl.camera_position = 'xy'
 pl.camera.zoom(1.3)
-pl.show(screenshot=osp.join('D:/InletProfileStudy/SSM/figures', 'points_rbf_kh.png'))
+pl.show(screenshot=osp.join(Fig_Dir, 'points_rbf_kh.png'))
 
 
 pl = pv.Plotter()
-pl.add_mesh(aligned_planes[5], clim=[0,1.4], scalars='Velocity', cmap='jet')
+pl.add_mesh(mean_planes[3], clim=[0,1.4], scalars='Velocity', cmap='jet')
 #pl.add_mesh(interp_planes[3], clim=[0,1.4], scalars='Velocity', cmap='jet')
 pl.camera_position = 'xy'
 pl.camera.zoom(1.3)
 pl.remove_scalar_bar()
-pl.show(screenshot=osp.join('D:/InletProfileStudy/SSM/figures', 'profile_raw_kh.png'))
+pl.show(screenshot=osp.join(Fig_Dir, 'mean_profile_raw_kh.png'))
 
 
