@@ -12,11 +12,11 @@ from scipy.interpolate import interp1d
 
 #-----------------------------------------------------------------------------------------------------------------------
 ## Options
-profilesDir = r'C:/Users/cha113/OneDrive - Imperial College London/PhD supervision/Zhongjie/healthy/flow4d/zhongjie/1.9/idealised_mapped/inlet_vtps'
-outputDir = r'C:/Users/cha113/OneDrive - Imperial College London/PhD supervision/Zhongjie/healthy/flow4d/zhongjie/1.9/idealised_mapped'
-saveName = 'healthy_02'
+profilesDir = r'D:\InletProfileStudy\SSM\Output_2024\SH_P5\synthetic_cohort_first13modes\089'
+outputDir = r'D:\InletProfileStudy\SolverOutput\Shared_csv\Syn_root_89'
+saveName = 'syn_root_89'
 cfd_delta_t = 0.001  # simulation time steps
-cardiac_cycle_period = 0.835
+cardiac_cycle_period = 0.858
 time_interpolation = 'cubic' # can be linear, nearest, quadratic, ...
 solver = 'cfx_xyz' # can be star, cfx, cfx_xyz or fluent
 # samplerate = 0.2 # 1 = all points used, set to < 1 to lower the number of points sampled when writing cfx files - there is a file size limit of ~40 MB per .csv file

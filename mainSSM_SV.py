@@ -21,7 +21,7 @@ from matplotlib import colormaps
 
 
 ## ---> SETTINGS
-preprocDir = r'D:/InletProfileStudy/SSM/Output_2024/SH_P5/'
+preprocDir = r'D:/InletProfileStudy/SSM/Output_2024/Circular/'
 synthOutDir = osp.join(preprocDir, 'sampled_profiles')
 Fig_Dir = osp.join(preprocDir, 'Figure')
 os.makedirs(synthOutDir, exist_ok=True)
@@ -97,7 +97,8 @@ variance = pca.explained_variance_
 b_range = np.arange(-1.5,2,0.5)
 total_flowrates = np.empty((5,20,b_range.shape[0]))
 total_flowrate = np.zeros((n_frames, b_range.shape[0]))
-meanPlane_flowrate = dut.compute_flowrate(mean_planes)['Q(t)'] * 60000# calculate flowrates on the mean plane, and unit change to L/min
+#meanPlane_flowrate = dut.compute_flowrate(mean_planes)['Q(t)'] * 60000# calculate flowrates on the mean plane, and unit change to L/min
+meanPlane_flowrate = dut.compute_flowrate(mean_planes)['Q(t)']
 SV_meanPlane = np.sum(meanPlane_flowrate)
 #mean_planes_SV = [mean_planes[0].copy() for _ in range(n_frames)]
 #ratio_SV = 113 / SV_meanPlane
@@ -125,7 +126,8 @@ for which_mode in range(0, 5): #first 5 modes
             gen_planes[k]['Velocity'] = (mean_prof[k] + (how_much_std * std * pc_i[k])) * ratio_SV  # all modes are scaled to match the SV
             gen_planes[k].save(osp.join(outDirSynth,
                     'prof_mode{}_coeff_{}_frame{:02d}.vtp'.format(which_mode, how_much_std, k)))    # {:02d} padded with 0 and has 2 digitals.
-        flowRate = dut.compute_flowrate(gen_planes)['Q(t)'] * 60000  # unit convert to L/min
+        #flowRate = dut.compute_flowrate(gen_planes)['Q(t)'] * 60000  # unit convert to L/min
+        flowRate = dut.compute_flowrate(gen_planes)['Q(t)'] 
 
         total_flowrate[:,count] = flowRate
     x_value = np.linspace(0,0.7,20)   # time

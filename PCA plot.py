@@ -18,8 +18,8 @@ from scipy import interpolate
 
 
 ## ---> SETTINGS
-preprocDir = r'D:/InletProfileStudy/SSM/Output_kaihong/Patient_5_new700/'
-figureDir = osp.join(preprocDir, 'PCA figures')
+preprocDir = r'D:/InletProfileStudy/SSM/Output_2024/Circular/'
+figureDir = osp.join(preprocDir, 'Figure')
 
 os.makedirs(figureDir, exist_ok=True)
 
@@ -40,7 +40,7 @@ print('Performing PCA...')
 
 
 # 2. Compute individual and cumulative variance
-pca = PCA(n_components=32)                                 # total n. of components has to be equal to min(n_samples, n_variables)
+pca = PCA(n_components=33)                                 # total n. of components has to be equal to min(n_samples, n_variables)
 pca.fit(V)
 var_components = pca.explained_variance_ratio_                # individual variance assciated to each component (mode)
 var = np.sum(pca.explained_variance_ratio_[:26])              # total variance
@@ -59,7 +59,7 @@ cum_explained_var = np.asarray(cum_explained_var)
 fig, ax1 = plt.subplots()
 
 # Plot individual values on the left y-axis
-ax1.bar(np.arange(len(pca.explained_variance_ratio_)), pca.explained_variance_ratio_, color='b', alpha=0.5, label='Individual Values')
+ax1.bar(np.arange(len(pca.explained_variance_ratio_)), pca.explained_variance_ratio_, color='k', alpha=0.5, label='Individual Values')
 ax1.set_ylabel('Individual Variance (%)', color='b')
 ax1.set_xlabel('Principal componants', color='k')
 ax1.tick_params('y', colors='b')
@@ -77,7 +77,7 @@ plt.xlabel('Principal componants')
 
 
 # Add legend and title
-ax1.legend(loc='upper right')
+ax1.legend(loc='center right', frameon=False)
 
 #save the figure
 plt.savefig(osp.join(figureDir,'culmulative variance.png'))

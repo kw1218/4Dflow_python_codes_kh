@@ -20,9 +20,9 @@ import descriptors_utils as dut
 
 
 
-dataDir = r'D:/InletProfileStudy/SSM/Output_2024/SH_P5/'
+dataDir = r'D:/InletProfileStudy/SSM/Output_2024/Circular/'
 Fig_Dir = osp.join(dataDir, 'Figure')
-outDir = osp.join(dataDir, 'synthetic_cohort_first14modes')
+outDir = osp.join(dataDir, 'synthetic_cohort_first8modes')
 
 # read computed descriptors for real dataset
 real_descriptors = [np.load(fn, allow_pickle=True).tolist() for fn in sorted(glob(osp.join(dataDir, 'real_descriptors', '*.npy')))]
@@ -46,7 +46,7 @@ n_nodes = mean_profs[0].points.shape[0]
 
 
 # ----- Principal Component Analysis
-pca = PCA(n_components=14)  # consistent with the number of modes used to generate synthetic dataset
+pca = PCA(n_components=8)  # consistent with the number of modes used to generate synthetic dataset
 pca.fit(V)
 
 
@@ -73,7 +73,7 @@ for k in ks:
     print('{} -- {:.2f}+-{:.2f}'.format(k, mu_d, 2*std_d))
 '''
 
-M = 14  # number of nodes selected
+M = 8  # number of nodes selected
 valid_count = 0
 synth_ds = []
 for i in tqdm(range(300)):
@@ -117,7 +117,7 @@ from scipy import stats
 
 alphaLevel = 0.05
 
-fn = osp.join('D:/InletProfileStudy/SSM/Output_Kaihong/', 'statistics.json')
+fn = osp.join('D:/InletProfileStudy/SSM/Output_2024/Circular', 'statistics.json')
 if osp.exists(fn):
      os.remove(fn)
 
