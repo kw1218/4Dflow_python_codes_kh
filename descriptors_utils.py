@@ -80,14 +80,45 @@ def compute_flow_jet_angle(profs):
     out = {'fja(t)': fja, 'fja_systole': fja[np.argmax(compute_flowrate(profs)['Q(t)'])], 'fja_max': np.max(fja), 'fja_mean': np.mean(fja)}
     return out
 
-def compute_flow_jet_angle_kh(profs):
-    # flow jet angle
-    normal = np.abs(profs[0].compute_normals()['Normals'].mean(0))
-    #mean_vels = [np.array(np.mean(profs[k]['Velocity'], axis=0))**2 for k in range(len(profs))]
-    mean_vels = [normvec(np.array(np.mean(profs[k]['Velocity'], axis=0))) for k in range(len(profs))]
-    fja = [np.rad2deg(math.acos(np.dot(mean_vels[k], normal))) for k in range(len(profs))]
-    out = {'fja(t)': fja, 'fja_systole': fja[np.argmax(compute_flowrate(profs)['Q(t)'])], 'fja_max': np.max(fja), 'fja_mean': np.mean(fja)}
-    return out
+def compute_flow_jet_angle_kh(profiles):
+    """
+    Calculate the flow jet angle for a series of velocity profiles.
+    
+    Args:
+        profiles (list): List of profiles containing 'Velocity' vectors for each cross-section.
+
+    Returns:
+        dict: A dictionary containing flow jet angles over time, the maximum angle, the mean angle, and the angle during systole.
+    """
+    # Extract normal vector from the first profile
+    normal_vector = np.mean(profiles[0].compute_normals()['Normals'], axis=0)*-1
+    normal_unit_vector = normal_vector / np.linalg.norm(normal_vector)  # Normalize the normal vector
+
+    # Calculate the flow jet angles for each profile
+    flow_jet_angles = []
+    for profile in profiles:
+        # Calculate the mean velocity vector and normalize it
+        mean_velocity_vector = np.mean(profile['Velocity'], axis=0)
+        mean_velocity_unit_vector = mean_velocity_vector / np.linalg.norm(mean_velocity_vector)
+        
+        # Calculate the angle using the dot product
+        cosine_angle = np.dot(mean_velocity_unit_vector, normal_unit_vector)
+        angle = np.arccos(np.clip(cosine_angle, -1.0, 1.0))  # Clip the cosine value to avoid numerical issues
+        flow_jet_angles.append(np.degrees(angle))  # Convert to degrees
+
+    # Find the angle during systole (assuming systole corresponds to maximum flow rate)
+    flow_rates =compute_flowrate(profiles)['Q(t)']
+    systole_index = np.argmax(flow_rates)
+    
+    # Create a dictionary with the calculated values
+    results = {
+        'fja(t)': flow_jet_angles,
+        'fja_systole': flow_jet_angles[systole_index],
+        'fja_max': np.max(flow_jet_angles),
+        'fja_mean': np.mean(flow_jet_angles)
+    }
+    
+    return results
 
 # secondary flow degree
 def compute_secondary_flow_degree(profs):

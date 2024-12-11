@@ -22,7 +22,7 @@ import descriptors_utils as dut
 
 dataDir = r'D:/InletProfileStudy/SSM/Output_2024/Circular/'
 Fig_Dir = osp.join(dataDir, 'Figure')
-outDir = osp.join(dataDir, 'synthetic_cohort_first8modes')
+outDir = osp.join(dataDir, 'synthetic_cohort_first15modes')
 
 # read computed descriptors for real dataset
 real_descriptors = [np.load(fn, allow_pickle=True).tolist() for fn in sorted(glob(osp.join(dataDir, 'real_descriptors', '*.npy')))]
@@ -46,7 +46,7 @@ n_nodes = mean_profs[0].points.shape[0]
 
 
 # ----- Principal Component Analysis
-pca = PCA(n_components=8)  # consistent with the number of modes used to generate synthetic dataset
+pca = PCA(n_components=15)  # consistent with the number of modes used to generate synthetic dataset
 pca.fit(V)
 
 
@@ -73,7 +73,7 @@ for k in ks:
     print('{} -- {:.2f}+-{:.2f}'.format(k, mu_d, 2*std_d))
 '''
 
-M = 8  # number of nodes selected
+M = 15  # number of nodes selected
 valid_count = 0
 synth_ds = []
 for i in tqdm(range(300)):

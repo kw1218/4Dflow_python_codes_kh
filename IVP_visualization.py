@@ -12,16 +12,16 @@ from vtkmodules.vtkRenderingAnnotation import vtkAxesActor
 
 # -----------------------------------------------------------------------------------------------------------------------
 # rootDir=r'D:\InletProfileStudy\SSM\Output_2024\Circular\synthetic_cohort_first8modes'  # path to synthetic files or sampled profiles
-# Out_Dir = r'D:/InletProfileStudy/SSM/Input/flow_csv'
+Out_Dir = r'D:/InletProfileStudy/SSM/Input/flow_csv'
 # IVP_number = '010'
 # IVP_path = osp.join(rootDir,IVP_number)
-#IVP_path = osp.join(rootDir)
 # vtp_path = osp.join(IVP_path, '*.vtp')
+
 Output_csv = False
 # os.makedirs(Out_Dir, exist_ok=True)
 
 
-rootDir=r'D:\InletProfileStudy\SSM\Input\Probed_root\TBAD02'
+rootDir=r'D:\InletProfileStudy\ReadandScale\scaling\Shu_jianming'
 vtp_path = osp.join(rootDir, '*.vtp')
 
 # -----------------------------------------------------------------------------------------------------------------------
@@ -33,8 +33,8 @@ input_vtps = pv.read(sorted(glob((vtp_path))))
 
 ## Flow rate
 # Compute flow rate and convert to l/min
-flow_rate = dut.compute_flowrate(input_vtps)['Q(t)'] * 60000  # l/min
-# flow_rate = dut.compute_flowrate(input_vtps)['Q(t)'] * 20 
+#flow_rate = dut.compute_flowrate(input_vtps)['Q(t)'] *60000  # l/min: for patient-specific profiles visualization
+flow_rate = dut.compute_flowrate(input_vtps)['Q(t)'] * 20  # for synthetic profiles visualization
 max_flow_rate = np.max(flow_rate)
 frame_max_flow_rate = np.argmax(flow_rate)
 
@@ -73,7 +73,7 @@ pl.show_axes()
 pl.show()
 
 plotter = pv.Plotter()
-plotter.add_mesh(input_vtps[int(frame_max_flow_rate)].warp_by_vector(factor=0.05), scalars='Velocity',clim=[0, 0.8], cmap='jet')
+plotter.add_mesh(input_vtps[int(frame_max_flow_rate)].warp_by_vector(factor=0.05), scalars='Velocity',clim=[0, 0.7], cmap='jet')
 scalar_bar = plotter.add_scalar_bar(title='Velocity', n_labels=2,shadow=True, italic=True)
 
 
