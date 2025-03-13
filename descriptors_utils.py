@@ -77,7 +77,10 @@ def compute_flow_jet_angle(profs):
     #mean_vels = [np.array(np.mean(profs[k]['Velocity'], axis=0))**2 for k in range(len(profs))]
     mean_vels = [normvec(np.array(np.mean(profs[k]['Velocity'], axis=0))) for k in range(len(profs))]
     fja = [np.rad2deg(math.acos(np.dot(mean_vels[k], normal))) for k in range(len(profs))]
-    out = {'fja(t)': fja, 'fja_systole': fja[np.argmax(compute_flowrate(profs)['Q(t)'])], 'fja_max': np.max(fja), 'fja_mean': np.mean(fja)}
+    fja = np.array(fja)
+    indices = np.where(fja<90)[0]
+    fja_systole = fja[indices]
+    out = {'fja(t)': fja, 'fja_systole': fja[np.argmax(compute_flowrate(profs)['Q(t)'])], 'fja_max': np.max(fja), 'fja_mean': np.mean(fja), 'fja_systole_mean': np.mean(fja_systole)}
     return out
 
 def compute_flow_jet_angle_kh(profiles):

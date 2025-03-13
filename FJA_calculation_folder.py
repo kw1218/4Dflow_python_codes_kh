@@ -22,8 +22,9 @@ rootDir=r'D:\InletProfileStudy\SSM\Output_2024\Circular\synthetic_cohort_first8m
 
 ## Read IVPs
 folders = [f.path for f in os.scandir(rootDir) if f.is_dir()]
-fja_all = 0
-fdi_all = 0
+fja_sum = 0
+fdi_sum = 0
+fja = []
 for folder in folders:
     vtp_path=osp.join(folder, '*.vtp')
     input_vtps = pv.read(sorted(glob((vtp_path))))
@@ -42,12 +43,14 @@ for folder in folders:
     ## HFI calculation
     HFI_all = dut.compute_helical_flow_index(input_vtps)
 
-    fja_all += FJA_all['fja_mean']
-    fdi_all += FDI_all['fdi_mean']
+    fja.append(FJA_all['fja_systole_mean'])
+    fja_sum += FJA_all['fja_systole_mean']
+    fdi_sum += FDI_all['fdi_mean']
 
-avg_fja = fja_all/len(folders)
-avg_fdi = fdi_all/len(folders)
+avg_fja = fja_sum/len(folders)
+avg_fdi = fdi_sum/len(folders)
 print('Average FJA:', avg_fja)
+print('Min and max FJA:', min(fja), max(fja))
 print('Average FDI:', avg_fdi)
 
 

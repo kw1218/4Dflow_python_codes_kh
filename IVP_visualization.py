@@ -21,7 +21,7 @@ Output_csv = False
 # os.makedirs(Out_Dir, exist_ok=True)
 
 
-rootDir=r'D:\InletProfileStudy\ReadandScale\scaling\Shu_jianming'
+rootDir=r'D:\InletProfileStudy\ReadandScale\scaling\BH_2025'
 vtp_path = osp.join(rootDir, '*.vtp')
 
 # -----------------------------------------------------------------------------------------------------------------------
@@ -73,7 +73,7 @@ pl.show_axes()
 pl.show()
 
 plotter = pv.Plotter()
-plotter.add_mesh(input_vtps[int(frame_max_flow_rate)].warp_by_vector(factor=0.05), scalars='Velocity',clim=[0, 0.7], cmap='jet')
+plotter.add_mesh(input_vtps[int(frame_max_flow_rate)].warp_by_vector(factor=0.1), scalars='Velocity',clim=[0, 0.7], cmap='jet')
 scalar_bar = plotter.add_scalar_bar(title='Velocity', n_labels=2,shadow=True, italic=True)
 
 

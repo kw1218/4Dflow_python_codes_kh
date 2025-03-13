@@ -18,7 +18,7 @@ os.makedirs(Out_Dir, exist_ok=True)
 Output_csv = False
 
 
-rootDir=r'D:\InletProfileStudy\SSM\Output_2024\Circular\clinical_cohort\TBAD05'
+rootDir=r'D:\InletProfileStudy\SSM\Output_2024\Circular\clinical_cohort\TBAD02'
 vtp_path = osp.join(rootDir, 'prof*.vtp')
 
 
@@ -52,11 +52,14 @@ HFI_all = dut.compute_helical_flow_index(input_vtps)
 # print('PPV at peak systole:', PPV_all['ppv_systole'])
 # print('PPV mean:', PPV_all['ppv_mean'])
 
-print('FJA at peak systole:', FJA_all['fja_systole'])
-print('FJA mean:', FJA_all['fja_mean'] -180)
+# print('FJA at peak systole:', FJA_all['fja_systole'])
+# print('FJA mean:', FJA_all['fja_mean'] )
+# # print('FJA max:', FJA_all['fja_max'] -180 )
+# print('FJA all:', FJA_all['fja(t)'] )
+print('FJA systole mean:', FJA_all['fja_systole_mean'] )
 
-print('FDI at peak systole:', FDI_all['fdi_systole'])
-print('FDI mean:', FDI_all['fdi_mean'])
+# print('FDI at peak systole:', FDI_all['fdi_systole'])
+# print('FDI mean:', FDI_all['fdi_mean'])
 
 # print('SFD at peak systole:', SFD_all['sfd_systole'])
 # print('SFD mean:', SFD_all['sfd_mean'])
@@ -73,3 +76,7 @@ peak = int(peak)
 
 input_vtps[peak].plot(scalars='Velocity',clim=[0,0.5],cmap='jet')
 input_vtps[peak].warp_by_vector(factor=0.5).plot(scalars='Velocity',clim=[0,0.5],cmap='jet')
+
+# for k in range(len(input_vtps)):
+#     # input_vtps[k].plot(scalars='Velocity',clim=[0,0.5],cmap='jet')
+#     input_vtps[k].warp_by_vector(factor=0.5).plot(scalars='Velocity',clim=[0,0.5],cmap='jet')
